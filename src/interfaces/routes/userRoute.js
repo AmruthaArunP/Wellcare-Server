@@ -4,6 +4,7 @@ const userController = require('../controllers/userController')
 const {validateToken} = require('../../middlewares/jwt');
 const upload = require('../../middlewares/multer');
 const { authUser } = require('../../middlewares/auth');
+const ChatUsecases = require('../../usecases/ChatUsecases');
 
 
 
@@ -28,6 +29,7 @@ userRoute.get('/userAppoinments', validateToken, authUser, userController.userAp
 userRoute.post('/cancelAppoinment/:id', validateToken, authUser, userController.cancelAppoinment)
 userRoute.get('/load-user-chatess/:chatId', validateToken, userController.userChatEssentials)
 userRoute.get('/prescriptions', validateToken, authUser, userController.prescriptions)
+userRoute.get('/chat/history', validateToken, ChatUsecases.getChatByChatId)
 
 
 

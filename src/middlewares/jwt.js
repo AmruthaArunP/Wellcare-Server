@@ -7,7 +7,7 @@ const createTokens = (user) => {
 
 const validateToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
-  console.log(authHeader);
+  console.log("Validate user - token is:*******",authHeader);
   if (authHeader) {
     const token = authHeader.split(" ")[1];
     verify(token, process.env.JWT_SECRET, (err, decoded) => {
@@ -31,15 +31,17 @@ const createDoctorTokens = (user) => {
 
 const validateDoctorToken = (req, res, next) => {
   const authHeader = req.headers.authorization;
-  console.log("token is :",authHeader);
+  console.log("Validate doctor - token is :",authHeader);
   if (authHeader) {
     const token = authHeader.split(" ")[1];
     verify(token, process.env.JWT_SECRET, (err, decoded) => {
       if (err) {
         res.json("unauthorized");
+      }else{
+        req._id = decoded;
+        next();
       }
-      req._id = decoded;
-      next();
+
     });
   } else {
     res.json("unauthorized");

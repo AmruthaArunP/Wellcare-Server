@@ -7,37 +7,37 @@ module.exports = function (io) {
       
         //chat 
 
-        socket.on('set-up', (userData) => {
-          socket.join(userData)
-      });
+      //   socket.on('set-up', (userData) => {
+      //     socket.join(userData)
+      // });
 
-      socket.on('setup', (userData) => {
-          console.log(`User ${userData._id} connected to chat`);
-          socket.join(userData._id);
-          socket.emit('chat-connected');
-      });
+      // socket.on('setup', (userData) => {
+      //     console.log(`User ${userData._id} connected to chat`);
+      //     socket.join(userData._id);
+      //     socket.emit('chat-connected');
+      // });
 
-      socket.on('join-chat', (roomId, user, doctor) => {
+      // socket.on('join-chat', (roomId, user, doctor) => {
         
-          socket.join(roomId);
-          if(doctor && user){
-          socket.in(doctor).emit('user-requested',user,roomId)
-          }
-          io.to(roomId).emit('chat-connected');
-      });
+      //     socket.join(roomId);
+      //     if(doctor && user){
+      //     socket.in(doctor).emit('user-requested',user,roomId)
+      //     }
+      //     io.to(roomId).emit('chat-connected');
+      // });
 
-      socket.on('send-message', (message, chatId) => {
-          console.log(message, chatId);
-          socket.in(chatId).emit('recieved-message', message)
-      })
+      // socket.on('send-message', (message, chatId) => {
+      //     console.log(message, chatId);
+      //     socket.in(chatId).emit('recieved-message', message)
+      // })
 
-      socket.on('doc-rejected',(user)=>{
-          socket.in(user).emit('chat-rejected')
-      })
+      // socket.on('doc-rejected',(user)=>{
+      //     socket.in(user).emit('chat-rejected')
+      // })
 
-      socket.on('leave-chat',(roomId) => {
-          socket.leave(roomId)
-      });
+      // socket.on('leave-chat',(roomId) => {
+      //     socket.leave(roomId)
+      // });
 
       //video
 

@@ -129,6 +129,8 @@ const doctorUsecases = {
                     if(doctorData.isVerified){
                           if (!doctorData.isBlocked) {
                             const token = createDoctorTokens(doctorData._id);
+                            console.log("login time - doctorToken is :", token);
+
                             return {doctorData ,token };
                           } else {
                             return { error :'blocked'};

@@ -2,6 +2,7 @@ const express = require('express');
 const doctorController = require('../controllers/doctorController')
 const upload = require('../../middlewares/multer');
 const { validateDoctorToken } = require('../../middlewares/jwt');
+const ChatUsecases = require('../../usecases/ChatUsecases');
 const doctorRoute = express();
 
 doctorRoute.post('/signup' ,upload.single('image'), doctorController.doctorSignup);
@@ -25,6 +26,7 @@ doctorRoute.get('/load-doc-chatess/:chatId',validateDoctorToken, doctorControlle
 doctorRoute.get('/schedule-data', validateDoctorToken, doctorController.viewDocSchedule)
 doctorRoute.patch('/addPrescription', validateDoctorToken, doctorController.addPrescription)
 doctorRoute.get('/patients', validateDoctorToken, doctorController.patients)
+doctorRoute.get('/chat/history', validateDoctorToken, ChatUsecases.getChatByChatId)
 
 
 

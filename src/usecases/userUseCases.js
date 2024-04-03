@@ -165,6 +165,7 @@ const userUsecases = {
               if (userData.isVerified === true) {
                 if (!userData.isBlocked) {
                   const token = createTokens(userData._id);
+                  console.log("Login time - userToken is :", token);
                   return { userData, token };
                 } else {
                   console.log('blocked user');

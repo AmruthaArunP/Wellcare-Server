@@ -157,7 +157,7 @@ const userController = {
         try {
             const userId = req._id.id
             console.log("reached");
-            console.log("id of dr:", userId);
+            console.log("id of user:", userId);
             const user = await userUsecases.fetchUserById(userId);
             console.log('user profile:',user);
             res.json(user);
