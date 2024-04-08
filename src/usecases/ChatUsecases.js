@@ -1,4 +1,5 @@
-const chatRepository = require('../repositories/chatRepository')
+const chatRepository = require('../repositories/chatRepository');
+const doctorUsecases = require('./doctorUsecases');
 const ChatUsecases ={
     saveChat : async (data) =>{
         try {
@@ -25,7 +26,9 @@ const ChatUsecases ={
         } catch (error) {
             console.log(error);
         }
-    }
+    },
+
+
 
 }
 

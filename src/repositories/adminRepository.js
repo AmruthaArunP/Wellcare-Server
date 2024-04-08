@@ -2,6 +2,7 @@ const Doctor = require('../entities/doctorModels')
 const Patient = require('../entities/userModels')
 const Department = require('../entities/departmentModel')
 const User = require('../entities/userModels')
+const Appointments = require('../entities/appoinmentModel')
 const adminRepository = {
     getAllPatients: async () => {
         try {
@@ -164,6 +165,17 @@ const adminRepository = {
             }
         } catch (error) {
             throw new Error("Error updating department status");
+        }
+    },
+
+    appoints : async (req, res) => {
+        try {
+            const result = await Appointments.find()
+            return result;
+        } catch (error) {
+            console.error('Error fetching Appoinments:', error);
+            throw new Error("Error while fetching appoinments");
+                      
         }
     }
 }

@@ -7,22 +7,33 @@ const { dateTime} =require('../services/dateAndTime')
 
 const userRepository = {
     findByEmail : async (email)=>{
+      try {
         return await User.findOne({email});
+      } catch (error) {
+        console.log("error finding user already in db",error);
+      }
     },
 
     createUser : async (userData) => {
-      console.log("data comming 3:",userData);
-      console.log("user data last....",userData);
+      try {
         return await User.create(userData)
+      } catch (error) {
+        console.log("error creating new user",error);
+      }
     },
 
     updateUser: async (email) => {
+      try {
         const userData = await User.findOneAndUpdate(
           { email },
           { $set: { otp: "", isVerified: true } }, 
           { new: true }
         );
         return userData;
+      } catch (error) {
+        console.log("error updating user",error);
+
+      }
       },
     
       findDoctors : async () => {
@@ -77,17 +88,31 @@ const userRepository = {
       },
 
       findSpeciality : async () => {
-        return Departments.find({})
+        try {
+          return Departments.find({})
+        } catch (error) {
+          console.log("error finding department",error);
+        }
       },
 
       saveUser : async (user) => {
-        await user.save();
+        try {
+          await user.save();
+        } catch (error) {
+          console.log("error saving user",error);
+        }
+        
       },
 
       resetPassword : async (email, password) => {
-        console.log('comming data:',email, password);
-        const user = await User.findOneAndUpdate({email : email},{$set : {password:password}},{ new: true } )
-        return user;
+        try {
+          console.log('comming data:',email, password);
+          const user = await User.findOneAndUpdate({email : email},{$set : {password:password}},{ new: true } )
+          return user;
+        } catch (error) {
+          console.log("error is....",error);
+        }
+
       },
 
       updateUserProfile : async (id, profileData) => {
@@ -101,32 +126,57 @@ const userRepository = {
     },
 
     deleteData : async (deleteData, id) => {
-      const user = await User.findOneAndUpdate(
-        { _id: id },
-        { $pull: { documents: deleteData } }
-    )
-    const userData = await User.find({ _id: id }, { password: 0 });
-    return userData
+      try {
+        const user = await User.findOneAndUpdate(
+          { _id: id },
+          { $pull: { documents: deleteData } }
+      )
+      const userData = await User.find({ _id: id }, { password: 0 });
+      return userData
+      } catch (error) {
+        console.log("error is....",error);
+      }
     },
 
       getUserById : async (id) => {
-        return User.find({_id : id});
+        try {
+          return User.find({_id : id});
+        } catch (error) {
+          console.log("error is....",error);
+        }
     },
 
       getScheduleByDoctorId : async (docId) => {
-        return await Schedule.find({ doctor: docId }, { _id: 0, doctor: 0 })
+        try {
+          return await Schedule.find({ doctor: docId }, { _id: 0, doctor: 0 })
+        } catch (error) {
+          console.log("error is....",error);
+
+        }
       },
 
       getAppointmentsByDoctorId : async (docId) => {
-        return await Appoinment.find({ doctor: docId },{ date: 1, time: 1 })
+        try {
+          return await Appoinment.find({ doctor: docId },{ date: 1, time: 1 })
+        } catch (error) {
+          console.log("error is....",error);
+        }
       },
 
       deteteOldSlot : async (date) => {
-        await Schedule.deleteOne({ date : date })
+        try {
+          await Schedule.deleteOne({ date : date })
+        } catch (error) {
+          console.log("error is....",error);
+        }
       },
 
       checkSlot : async (doctor, time, day) => {
-        return await Appoinment.find({doctor:doctor,date:day,time:time})
+        try {
+          return await Appoinment.find({doctor:doctor,date:day,time:time})
+        } catch (error) {
+          console.log("error is....",error);
+        }
       },
 
       bookSlot : async (doctor, issues, fee, user, date, time) => {
@@ -144,7 +194,11 @@ const userRepository = {
       },
 
       userData : async (id) => {
-        return await User.findById(id)
+        try {
+          return await User.findById(id)
+        } catch (error) {
+          console.log("error is....",error);
+        }
       },
 
       userAppoinments : async (id) => {
@@ -167,44 +221,67 @@ const userRepository = {
       },
 
       cancelAppoinment : async (id) => {
-        const appoinment = await Appoinment.findByIdAndUpdate(
-          {_id : id},
-          { $set: { isCancelled: true } },
-          { new: true }
-          )
-          return appoinment;
+        try {
+          const appoinment = await Appoinment.findByIdAndUpdate(
+            {_id : id},
+            { $set: { isCancelled: true } },
+            { new: true }
+            )
+            return appoinment;
+        } catch (error) {
+          console.log("error is....",error);
+        }
+
       },
 
       findAppointmentById  : async (appointmentId) => {
-        return await Appoinment.findById(appointmentId);
+        try {
+          return await Appoinment.findById(appointmentId);
+        } catch (error) {
+          console.log("error is....",error);
+        }
       },
 
       findUserById : async (userId) => {
-        return await User.findById(userId);
+        try {
+          return await User.findById(userId);
+        } catch (error) {
+          console.log("error is....",error);
+        }
+        
       },
 
       findBookingDoctorById : async (doctorId) => {
-        return await Doctor.findById(doctorId);
+        try {
+          return await Doctor.findById(doctorId);
+        } catch (error) {
+          console.log("error is....",error);
+        }
       },
 
       prescriptions : async (id) => {
-        const data = await Appoinment.aggregate([
-          {
-            $match: { 
-              user: id,
-              medicines: { $exists: true, $ne: {} } 
-            }
-          },
-          {
-            $lookup: {
-              from: "doctors",
-              let: { searchId: { $toObjectId: "$doctor" } },
-              pipeline: [{ $match: { $expr: { $eq: ["$_id", "$$searchId"] } } }],
-              as: "docData",
+        try {
+          const data = await Appoinment.aggregate([
+            {
+              $match: { 
+                user: id,
+                medicines: { $exists: true, $ne: {} } 
+              }
             },
-          },
-        ]);
-        return data;
+            {
+              $lookup: {
+                from: "doctors",
+                let: { searchId: { $toObjectId: "$doctor" } },
+                pipeline: [{ $match: { $expr: { $eq: ["$_id", "$$searchId"] } } }],
+                as: "docData",
+              },
+            },
+          ]);
+          return data;
+        } catch (error) {
+          console.log("error is....",error);
+        }
+
       }
 }
 

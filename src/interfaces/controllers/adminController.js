@@ -60,7 +60,7 @@ const adminController = {
     manageDoctor : async (req, res) => {
       try {
         const { id, status } = req.body;
-        console.log("id and status....",id,status);
+        //console.log("id and status....",id,status);
         const result = await adminUsecases.manageDoctor(id, status);
         if(result === 'Doctor blocked'){
           res.status(200).json({message:'Doctor blocked succesfully'})
@@ -136,6 +136,15 @@ const adminController = {
         }
       } catch (error) {
         res.status(500).json({ error: error.message });
+      }
+    },
+
+    appoints : async (req, res) => {
+      try {
+        const data = await adminUsecases.appoints()
+        res.status(200).json(data)
+      } catch (error) {
+        
       }
     }
 }

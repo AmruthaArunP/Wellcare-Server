@@ -94,7 +94,7 @@ const doctorController = {
     getDoctorProfile : async (req, res) => {
         try {
             const doctorId = req._id.id
-            console.log("id of dr:", doctorId);
+            //console.log("id of dr:", doctorId);
             const doctor = await doctorUsecases.fetchDoctorById(doctorId);
             console.log('doctor profile:',doctor);
             res.json(doctor);
@@ -310,6 +310,16 @@ const doctorController = {
         } catch (error) {
             console.log(error);
             res.status(500).json({ error: 'Internal server error' });
+        }
+    },
+
+    dash : async (req, res) => {
+        try {
+            const doctorId = req._id.id
+            const data = await doctorUsecases.dash(doctorId)
+            res.json(data)
+        } catch (error) {
+            console.log(error);
         }
     }
 

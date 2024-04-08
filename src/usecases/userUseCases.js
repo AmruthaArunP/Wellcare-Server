@@ -156,7 +156,7 @@ const userUsecases = {
       /*Login for user*/
       loginUser : async (email, password) => {
         try {
-          console.log("2 usecases");
+          
           const userData = await userRepository.findByEmail(email);
           console.log("userdata:",userData);
           if (userData) {
@@ -164,7 +164,7 @@ const userUsecases = {
             if (passwordMatch) {
               if (userData.isVerified === true) {
                 if (!userData.isBlocked) {
-                  const token = createTokens(userData._id);
+                  const token = createTokens(userData._id ,'user');
                   console.log("Login time - userToken is :", token);
                   return { userData, token };
                 } else {
@@ -237,7 +237,6 @@ const userUsecases = {
 
       setUserProfile : async (id, profileData) => {
         try {
-            console.log("2 nd........",profileData);
             const updatedUser = await userRepository.updateUserProfile(id, profileData);
             return updatedUser;
           } catch (error) {

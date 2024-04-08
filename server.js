@@ -58,8 +58,9 @@ io.on("connection", async (socket) => {
     );
   
   });
+console.log("*********----the socketManager reinitialized----***********");
 socketManager(io);
-//console.log("*********----the socketManager reinitialized----***********");
+console.log("*********----the socketManager reinitialized----***********");
 
 
 // app.listen(port, (req, res) => {

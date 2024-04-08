@@ -15,7 +15,7 @@ const adminUsecases = {
                 password : adminPassword
             };
             if(email === adminData.email && password === adminData.password){
-                const adminToken = createAdminTokens(adminData._id);
+                const adminToken = createAdminTokens(adminData._id , 'admin');
                 console.log(adminToken);
                 return { adminToken}
             }else{
@@ -105,6 +105,14 @@ const adminUsecases = {
             return result;
         } catch (error) {
             throw new Error("Error managing department");
+        }
+    },
+
+    appoints : async (req, res) => {
+        try {
+            return await adminRepository.appoints()
+        } catch (error) {
+            throw new Error("Error fetching appoinments for dashboard");
         }
     }
 }

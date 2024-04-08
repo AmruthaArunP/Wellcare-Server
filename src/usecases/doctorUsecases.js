@@ -128,7 +128,7 @@ const doctorUsecases = {
                 if(passwordMatch){
                     if(doctorData.isVerified){
                           if (!doctorData.isBlocked) {
-                            const token = createDoctorTokens(doctorData._id);
+                            const token = createDoctorTokens(doctorData._id, 'doctor');
                             console.log("login time - doctorToken is :", token);
 
                             return {doctorData ,token };
@@ -181,7 +181,7 @@ const doctorUsecases = {
 
     deleteDocument : async (deleteData, doctorId) => {
          try {
-            console.log('delete data 2:',deleteData);
+            //console.log('delete data 2:',deleteData);
             const doctorData = await doctorRepository.deleteDocument(deleteData, doctorId); 
             return doctorData;
          } catch (error) {
@@ -191,7 +191,7 @@ const doctorUsecases = {
 
     setDoctorProfile : async (id, profileData) => {
         try {
-            console.log("2 nd........",profileData);
+            
             const updatedDoctor = await doctorRepository.updateDoctorProfile(id, profileData);
             return updatedDoctor;
           } catch (error) {
@@ -202,7 +202,7 @@ const doctorUsecases = {
     addSchedule: async (doctorId, date, time) => {
         try {
             const existingSchedule = await doctorRepository.findScheduleByDoctorAndDate(doctorId, date);
-            console.log('existing:', existingSchedule);
+            //console.log('existing:', existingSchedule);
             if (existingSchedule) {
                 const uniqueTimes = time.filter(newTime => !existingSchedule.time.includes(newTime));
                 
@@ -221,7 +221,7 @@ const doctorUsecases = {
 
     removeSchedule : async (doctorId,date, time) => {
         try {
-            console.log("comming data 2:",date, time);
+            //console.log("comming data 2:",date, time);
             const existingSchedule = await doctorRepository.findScheduleByDoctorAndDate(doctorId, date)
             if (existingSchedule) {
                 if (existingSchedule.time.length === 1) {
@@ -259,7 +259,7 @@ const doctorUsecases = {
 
     consult : async (id) => {
         try {
-            console.log('2',id);
+            //console.log('2',id);
             return await doctorRepository.consult(id)
         } catch (error) {
             throw new Error('Error getting doctor consultation details');
@@ -314,6 +314,14 @@ const doctorUsecases = {
             return await doctorRepository.doctorAppoinments(id)
         } catch (error) {
             throw new Error('Error fetching patient details');
+        }
+    },
+
+    dash : async (id) => {
+        try {
+            return await doctorRepository.findAppointmentByDocId(id)
+        } catch (error) {
+            throw new Error('Error fetching appoinment details of doctor');
         }
     }
 

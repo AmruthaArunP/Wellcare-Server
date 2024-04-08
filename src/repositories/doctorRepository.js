@@ -7,35 +7,66 @@ const User = require('../entities/userModels')
 const doctorRepository = {
 
     findDoctorByEmail : async (email) => {
-        const doctorData = await Doctor.findOne({email});
-        return doctorData;
+        try {
+            const doctorData = await Doctor.findOne({email});
+            return doctorData;
+        } catch (error) {
+            console.log("error is....",error);
+        }
+
     },
 
     getDoctorById : async (id) => {
+        try {
         return Doctor.find({_id : id});
+        } catch (error) {
+            console.log("error is....",error);
+            
+        }
     },
 
     createDoctor : async (doctorDetails) => {
+        try {
         return await Doctor.create(doctorDetails);
+        } catch (error) {
+            console.log("error is....",error);
+            
+        }
     },
 
     saveUser : async (doctor) => {
+        try {
         await doctor.save();
+        } catch (error) {
+            console.log("error is....",error);  
+        }
       },
 
     resetPassword : async (email, password) => {
-        console.log('comming data:',email, password);
-        const user = await Doctor.findOneAndUpdate({email : email},{$set : {password:password}},{ new: true } )
-        return user;
+        try {
+            console.log('comming data:',email, password);
+            const user = await Doctor.findOneAndUpdate({email : email},{$set : {password:password}},{ new: true } )
+            return user;
+        } catch (error) {
+            console.log("error is....",error);
+        }
+
     },
 
     updateData : async (email) => {
-        const doctorData = await Doctor.findOneAndUpdate(
-            { email },
-            { $set: { otp: "", isVerified: true } }, 
-            { new: true }
-          );
-          return doctorData;
+        try {
+            const doctorData = await Doctor.findOneAndUpdate(
+                { email },
+                { $set: { otp: "", isVerified: true } }, 
+                { new: true }
+              );
+              return doctorData;
+        } catch (error) {
+            console.log('comming data:',email, password);
+            const user = await Doctor.findOneAndUpdate({email : email},{$set : {password:password}},{ new: true } )
+            return user;
+        }
+
     },
 
     updateDoctorOTP : async (email , otp) => {
@@ -80,7 +111,7 @@ const doctorRepository = {
     updateDoctorProfile : async (id, profileData) => {
         try {
             console.log("3rd nd........",profileData );
-            console.log("id.......",id );
+            //console.log("id.......",id );
 
             const updatedDoctor = await Doctor.findByIdAndUpdate(id, { $set: profileData }, { new: true });
             console.log("updated 4 th data.....",updatedDoctor);
@@ -91,7 +122,11 @@ const doctorRepository = {
     },
 
     findScheduleByDoctorAndDate : async (doctorId, date) => {
+        try {
         return Schedule.findOne({doctor : doctorId, date:date})
+        } catch (error) {
+            console.log("error is....",error);
+        }
     },
 
     updateSchedule: async (doctorId, date, time) => {
@@ -117,7 +152,11 @@ const doctorRepository = {
     },
 
     deleteSchedule : async (doctorId, date) => {
+        try {
         await Schedule.deleteOne({ doctor: doctorId, date : date });
+        } catch (error) {
+            console.log("error is....",error);
+        }
     },
 
     removeSchedule : async (doctorId, date, time) => {
@@ -129,11 +168,19 @@ const doctorRepository = {
     },
 
     findScheduleByDoctor : async (doctorId) => {
+        try {
         return await Schedule.find({doctor: doctorId })
+        } catch (error) {
+            console.log("error is....",error); 
+        }
     },
 
     getSchedule : async (doctorId) => {
+        try {
         return await Schedule.find({ doctor: doctorId }).sort({date:1})
+        } catch (error) {
+            console.log("error is....",error);
+        }
     },
 
     doctorAppoinments : async (id) => {
@@ -170,7 +217,7 @@ const doctorRepository = {
               },
             },
             {
-              // $sort: { date: -1, time: 1 },
+            //   $sort: { date: -1, time: 1 },
               $sort: { isAttended:1  },
             },
           ]);
@@ -178,20 +225,37 @@ const doctorRepository = {
     },
 
     endAppointment : async ( id) => {
-        const deleteAppoinment = await Appointment.findOneAndUpdate({_id: id},{ isAttended: true })
-        return deleteAppoinment
+        try {
+            const deleteAppoinment = await Appointment.findOneAndUpdate({_id: id},{ isAttended: true })
+            return deleteAppoinment
+        } catch (error) {
+            console.log("error is....",error);
+        }
+
     },
 
     findAppointmentByUserId : async (userId) => {
+        try {
         return await Appointment.findOne({ user: userId });
+        } catch (error) {
+            console.log("error is....",error);
+        }
       },
 
       findBookingDoctorById : async (doctorId) => {
+        try {
         return await Doctor.findById(doctorId);
+        } catch (error) {
+            console.log("error is....",error);
+        }
       },
 
       findUserById : async (userId) => {
+        try {
         return await User.findById(userId);
+        } catch (error) {
+            console.log("error is....",error);
+        }
       },
 
       updateAppointment : async (appointmentId, updateData) => {
@@ -200,6 +264,14 @@ const doctorRepository = {
           } catch (error) {
             throw new Error('Error updating appointment');
           }
+      },
+
+      findAppointmentByDocId : async (id) => {
+        try {
+            return await Appointment.find({doctor : id})
+        } catch (error) {
+            throw new Error('Error fetching appoinment details of doctor');
+        }
       }
 
     

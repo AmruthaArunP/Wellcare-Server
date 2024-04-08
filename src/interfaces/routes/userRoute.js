@@ -1,7 +1,7 @@
 const express = require('express')
 const userRoute = express()
 const userController = require('../controllers/userController')
-const {validateToken} = require('../../middlewares/jwt');
+const {validateToken, authorizeRole} = require('../../middlewares/jwt');
 const upload = require('../../middlewares/multer');
 const { authUser } = require('../../middlewares/auth');
 const ChatUsecases = require('../../usecases/ChatUsecases');
@@ -19,17 +19,17 @@ userRoute.patch('/resetPassword/:email', userController.resetPassword)
 userRoute.get('/findDoctors',userController.findDoctors);
 userRoute.get('/findSpeciality', userController.findSpeciality)
 userRoute.get('/searchDoctor/:searchKey', userController.searchDoctor)
-userRoute.get('/getUserProfile',validateToken, userController.getUserProfile)
-userRoute.post('/updateProfile',upload.array('images'), validateToken,authUser, userController.updateUserProfile)
-userRoute.delete('/deleteDocument/:deleteData', validateToken, userController.deleteDocument)
-userRoute.get('/docSchedule/:docId',validateToken ,authUser,userController.docSchedule)
-userRoute.post('/checkSlot', validateToken, userController.checkSlot)
-userRoute.post('/bookSlot', validateToken, userController.bookSlot)
-userRoute.get('/userAppoinments', validateToken, authUser, userController.userAppoinments)
-userRoute.post('/cancelAppoinment/:id', validateToken, authUser, userController.cancelAppoinment)
-userRoute.get('/load-user-chatess/:chatId', validateToken, userController.userChatEssentials)
-userRoute.get('/prescriptions', validateToken, authUser, userController.prescriptions)
-userRoute.get('/chat/history', validateToken, ChatUsecases.getChatByChatId)
+userRoute.get('/getUserProfile',validateToken, authorizeRole('user'), userController.getUserProfile)
+userRoute.post('/updateProfile',upload.array('images'), validateToken,authorizeRole('user'), authUser, userController.updateUserProfile)
+userRoute.delete('/deleteDocument/:deleteData', validateToken,authorizeRole('user'), userController.deleteDocument)
+userRoute.get('/docSchedule/:docId',validateToken ,authorizeRole('user'),authUser,userController.docSchedule)
+userRoute.post('/checkSlot', validateToken,authorizeRole('user'), userController.checkSlot)
+userRoute.post('/bookSlot', validateToken,authorizeRole('user'), userController.bookSlot)
+userRoute.get('/userAppoinments', validateToken,authorizeRole('user'), authUser, userController.userAppoinments)
+userRoute.post('/cancelAppoinment/:id', validateToken,authorizeRole('user'), authUser, userController.cancelAppoinment)
+userRoute.get('/load-user-chatess/:chatId', validateToken,authorizeRole('user'), userController.userChatEssentials)
+userRoute.get('/prescriptions', validateToken,authorizeRole('user'), authUser, userController.prescriptions)
+userRoute.get('/chat/history', validateToken, authorizeRole('user'), ChatUsecases.getChatByChatId)
 
 
 

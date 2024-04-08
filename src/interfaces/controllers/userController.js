@@ -159,7 +159,7 @@ const userController = {
             console.log("reached");
             console.log("id of user:", userId);
             const user = await userUsecases.fetchUserById(userId);
-            console.log('user profile:',user);
+            //console.log('user profile:',user);
             res.json(user);
         } catch (error) {
             res.status(404).json({ error: error.message });
@@ -224,6 +224,7 @@ const userController = {
             const docId = req.params.docId;
             console.log(docId);
             const slot = await userUsecases.getVailableSlots(docId)
+            console.log("slot shedule:",slot);
             res.json(slot)
         } catch (error) {
             res.status(500).json({ message: 'Internal Server Error' }); 
@@ -273,7 +274,7 @@ const userController = {
         try {
             console.log(1);
             const { id } = req.params;
-            console.log("id is:", id);
+            //console.log("id is:", id);
             const appoinmentCancel = await userUsecases.cancelAppoinment(id) 
             console.log(appoinmentCancel);
             res.json("cancelled");

@@ -4,7 +4,7 @@ const authUser = async (req, res, next) => {
     try {
       const id = req._id.id;
       const Data = await User.findOne({ _id: id });
-      console.log('user auth:',Data);
+      //console.log('user auth:',Data);
   
       if (!Data) {
         // Handle the case where the user with the provided ID is not found
