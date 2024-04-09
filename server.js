@@ -22,6 +22,22 @@ app.use(express.json())
 // app.use('/images',express.static("images"))
 app.use('/images', express.static(path.join(__dirname, 'src', 'images')));
 
+//CROSS ORIGIN RESOURCE SHARING
+const allowedOrigins = ["http://localhost:8000","https://wellcarehealth.online",];
+app.use(
+  cors({
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.indexOf(origin) !== -1) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
+    credentials: true,
+  })
+);
+
+
 
 app.use("/", userRoute);
 app.use("/admin", adminRoute);
@@ -42,7 +58,15 @@ const port = process.env.PORT || 5000
 const server = app.listen(port, (req, res) => {
     console.log(`the server is running on http://localhost:${port}`);
 })
-const io = new Server(server, { cors: true });
+const io = new Server(server, {
+  cors: {
+    origin: [`http://localhost:8000`, "https://wellcarehealth.online"],
+    methods: ["GET", "POST"],
+    credentials: true,
+  },
+  transports: ["websocket", "polling"],
+  allowEIO3: true,
+});
 
 io.on("connection", async (socket) => {
     socket.on("test", (data) => {
