@@ -272,6 +272,32 @@ const doctorRepository = {
         } catch (error) {
             throw new Error('Error fetching appoinment details of doctor');
         }
+      },
+
+      prescriptions : async (id) => {
+        try {
+            const data = await Appointment.aggregate([
+                {
+                    $match: { 
+                      doctor: id,
+                      medicines: { $exists: true, $ne: {} } 
+                    }
+                  },
+              {
+                $lookup: {
+                  from: "users",
+                  let: { searchId: { $toObjectId: "$user" } },
+                  pipeline: [{ $match: { $expr: { $eq: ["$_id", "$$searchId"] } } }],
+                  as: "userData",
+                },
+              },
+            ]);
+            console.log('prescription:',data);
+            return data
+          } catch (error) {
+            console.log(error);
+          }
+
       }
 
     

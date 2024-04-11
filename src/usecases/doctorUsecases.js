@@ -323,7 +323,15 @@ const doctorUsecases = {
         } catch (error) {
             throw new Error('Error fetching appoinment details of doctor');
         }
-    }
+    },
+
+    prescriptions : async (id) => {
+        try {
+          return await doctorRepository.prescriptions(id)
+        } catch (error) {
+          throw new Error(' error fetching prescription data');
+        }
+      }
 
 }
 

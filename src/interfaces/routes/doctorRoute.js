@@ -28,6 +28,7 @@ doctorRoute.patch('/addPrescription', validateDoctorToken,authorizeRole('doctor'
 doctorRoute.get('/patients', validateDoctorToken,authorizeRole('doctor'), doctorController.patients)
 doctorRoute.get('/chat/history', validateDoctorToken,authorizeRole('doctor'), ChatUsecases.getChatByChatId)
 doctorRoute.get('/dashboard', validateDoctorToken,authorizeRole('doctor'), doctorController.dash)
+doctorRoute.get('/prescriptions', validateDoctorToken, authorizeRole('doctor'), doctorController.prescriptions)
 
 
 

@@ -321,6 +321,17 @@ const doctorController = {
         } catch (error) {
             console.log(error);
         }
+    },
+
+    prescriptions : async (req, res) => {
+        try {
+            const id = req._id.id;
+            const data = await doctorUsecases.prescriptions(id)
+            console.log("prescription for user****************:",data);
+            res.json(data);
+        } catch (error) {
+            
+        }
     }
 
 }
