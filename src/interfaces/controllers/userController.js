@@ -120,23 +120,59 @@ const userController = {
         }
     },
 
-    findDoctors : async (req, res) => {
+    findDoctors : async (req, res) =>{
         try {
-            const doctors = await userUsecases.findDoctors();
-            res.status(200).json(doctors)
-        } catch (error) {
-            res.status(500).json({ message: 'Internal Server Error' }); 
-        }
+            const { docs, totalDocs, deps } = await userUsecases.getUsers();
+            res.json({ docs, totalDocs, deps });
+          } catch (error) {
+            res.status(500).json({ error: 'Internal Server Error' });
+          }
     },
+
+    // findDoctors : async (req, res) => {
+    //     try {
+    //         const doctors = await userUsecases.findDoctors();
+    //         console.log("doctors data -> for listing home :",doctors);
+    //         res.status(200).json(doctors)
+    //     } catch (error) {
+    //         res.status(500).json({ message: 'Internal Server Error' }); 
+    //     }
+    // },
+
+
+
+    // searchDoctor : async (req, res) => {
+    //     try {
+    //         const { searchKey, specialty } = req.params;
+    //         console.log("search name ====>:",searchKey , specialty);
+    //         const doctor = await userUsecases.searchDoctor(searchKey,specialty)
+    //         console.log('searched doc:',doctor);
+    //         res.status(200).json(doctor)
+    //     } catch (error) {
+    //         console.log('error while searching doctor:',error)
+    //         res.status(400).json({ message: error.message });
+    //     }
+    // },
 
     searchDoctor : async (req, res) => {
         try {
-            const { searchKey } = req.params
-            const doctor = await userUsecases.searchDoctor(searchKey)
-            console.log('searched doc:',doctor);
-            res.status(200).json(doctor)
+            const { searchKey, specialty } = req.params;
+            console.log("search name:", searchKey);
+            console.log("specialty:", specialty);
+            
+            let doctor;
+            if (specialty) {
+                // Search for doctors by name within a specific specialty
+                doctor = await userUsecases.searchDoctorByNameAndSpecialty(searchKey, specialty);
+            } else {
+                // Search for doctors by name across all specialties
+                doctor = await userUsecases.searchDoctor(searchKey);
+            }
+            
+            console.log('searched doc:', doctor);
+            res.status(200).json(doctor);
         } catch (error) {
-            console.log('error while searching doctor:',error)
+            console.log('error while searching doctor:', error);
             res.status(400).json({ message: error.message });
         }
     },

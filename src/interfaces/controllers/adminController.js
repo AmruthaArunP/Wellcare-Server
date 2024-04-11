@@ -105,8 +105,10 @@ const adminController = {
         const imagePath = req.file.path
         const createDep = await adminUsecases.createDep(newDep , image);
         if (createDep.error) { 
+          console.log('error ======>',createDep.error);
           res.status(500).json({ error: createDep.error }); 
         } else {
+          console.log("createDepartment =====> ",createDep);
           res.status(200).json({ message: "Success", createDep });
         }
       } catch (error) {

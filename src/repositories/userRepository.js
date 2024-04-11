@@ -61,6 +61,88 @@ const userRepository = {
         }
       },
 
+      getDoctors : async () => {
+        try {
+          return await Doctor.aggregate([
+            {
+              $match: {
+                isApproved: 'approved',
+                isBlocked: false,
+                isVerified: true,
+              },
+            },
+            {
+              $lookup: {
+                from: 'departments',
+                localField: 'department',
+                foreignField: '_id',
+                as: 'doctorData',
+              },
+            },
+          ])
+        } catch (error) {
+          throw new Error('Error in getting doctors: ' + error.message);
+        }
+      },
+
+      getTotalDoctors : async (req, res) => {
+        try {
+          return await Doctor.countDocuments({
+            isApproved: 'approved',
+            isBlocked: false,
+            isVerified: true,
+          });
+        } catch (error) {
+          throw new Error('Error in getting total doctors: ' + error.message);
+        }
+      },
+
+      getAllDepartments : async () => {
+        try {
+          return await Departments.find({ isBlocked: false });
+        } catch (error) {
+          throw new Error('Error in getting all departments: ' + error.message);
+        }
+      },
+
+      searchDoctorByNameAndSpecialty : async (searchKey, specialty) => {
+        try {
+          let aggregationPipeline = [
+            {
+              $match: {
+                isApproved: 'approved',
+                isBlocked: false,
+                isVerified: true,
+                name: { $regex: new RegExp(`${searchKey}`, "i") },
+              },
+            },
+            {
+              $lookup: {
+                from: 'departments',
+                localField: 'department',
+                foreignField: '_id',
+                as: 'doctorData',
+              },
+            }
+          ];
+      
+          if (specialty) {
+            // If a specialty is provided, add a $match stage to filter doctors by specialty
+            aggregationPipeline.push({
+              $match: {
+                "doctorData.name": specialty
+              }
+            });
+          }
+      
+          const doctors = await Doctor.aggregate(aggregationPipeline);
+          console.log('doctors data ======>',doctors);
+          return doctors;
+        } catch (error) {
+          throw new Error('Error fetching doctors');
+        }
+      },
+
       searchDoctor : async (searchKey) => {
         try {
           const doctors = await Doctor.aggregate([
@@ -86,6 +168,7 @@ const userRepository = {
           throw new Error('Error fetching doctors');
         }
       },
+
 
       findSpeciality : async () => {
         try {

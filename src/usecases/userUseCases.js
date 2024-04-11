@@ -213,6 +213,26 @@ const userUsecases = {
         }
       },
 
+      getUsers : async () => {
+        try {
+          const docs = await userRepository.getDoctors();
+          const totalDocs = await userRepository.getTotalDoctors();
+          const deps = await userRepository.getAllDepartments();
+          return { docs, totalDocs, deps };
+        } catch (error) {
+          throw new Error('Error in user use case: ' + error.message);
+        }
+      },
+
+      searchDoctorByNameAndSpecialty : async (name, specialty) => {
+        try {
+          return await userRepository.searchDoctorByNameAndSpecialty(name, specialty);
+        } catch (error) {
+          
+        }
+      },
+
+      
       searchDoctor : async (searchKey) => {
         try {
           if (searchKey === "all"){

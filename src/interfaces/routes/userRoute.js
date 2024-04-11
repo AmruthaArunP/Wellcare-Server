@@ -18,7 +18,8 @@ userRoute.get('/forgotPassword/:email',userController.forgotPassword)
 userRoute.patch('/resetPassword/:email', userController.resetPassword)
 userRoute.get('/findDoctors',userController.findDoctors);
 userRoute.get('/findSpeciality', userController.findSpeciality)
-userRoute.get('/searchDoctor/:searchKey', userController.searchDoctor)
+// userRoute.get('/searchDoc/:searchKey', userController.searchDoctor)
+userRoute.get('/searchDoc/:searchKey/:specialty?', userController.searchDoctor);
 userRoute.get('/getUserProfile',validateToken, authorizeRole('user'), userController.getUserProfile)
 userRoute.post('/updateProfile',upload.array('images'), validateToken,authorizeRole('user'), authUser, userController.updateUserProfile)
 userRoute.delete('/deleteDocument/:deleteData', validateToken,authorizeRole('user'), userController.deleteDocument)
