@@ -212,6 +212,7 @@ const doctorController = {
 
     getSchedule : async (req, res) => {
         try {
+            console.log("reached schedule");
             const doctorId = req._id.id
             const schedule = await doctorUsecases.getSchedule(doctorId)
             console.log(schedule);

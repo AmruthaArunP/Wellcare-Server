@@ -1,6 +1,7 @@
 const express = require('express');
 const doctorController = require('../controllers/doctorController')
 const upload = require('../../middlewares/multer');
+const { authDoc } = require('../../middlewares/docAuth')
 const { validateDoctorToken, authorizeRole } = require('../../middlewares/jwt');
 const ChatUsecases = require('../../usecases/ChatUsecases');
 const doctorRoute = express();
@@ -16,19 +17,19 @@ doctorRoute.get('/getDoctorProfile', validateDoctorToken,authorizeRole('doctor')
 doctorRoute.delete('/deleteDocument/:deleteData', validateDoctorToken,authorizeRole('doctor'), doctorController.deleteDocument);
 doctorRoute.get('/departments', validateDoctorToken,authorizeRole('doctor'), doctorController.departments)
 doctorRoute.post('/updateProfile',upload.array('images'), validateDoctorToken,authorizeRole('doctor'), doctorController.updateProfile)
-doctorRoute.post('/addSchedule', validateDoctorToken,authorizeRole('doctor'), doctorController.setSchedule)
+doctorRoute.post('/addSchedule', validateDoctorToken,authorizeRole('doctor') ,authDoc, doctorController.setSchedule)
 doctorRoute.post('/removeSchedule', validateDoctorToken,authorizeRole('doctor'), doctorController.removeSchedule)
-doctorRoute.get('/getSchedule', validateDoctorToken,authorizeRole('doctor'), doctorController.getSchedule)
-doctorRoute.get('/doctorAppoinments', validateDoctorToken,authorizeRole('doctor'), doctorController.doctorAppoinments)
-doctorRoute.get('/consult', validateDoctorToken,authorizeRole('doctor'), doctorController.consult)
+doctorRoute.get('/getSchedule', validateDoctorToken,authorizeRole('doctor'),authDoc, doctorController.getSchedule)
+doctorRoute.get('/doctorAppoinments', validateDoctorToken,authorizeRole('doctor'),authDoc, doctorController.doctorAppoinments)
+doctorRoute.get('/consult', validateDoctorToken,authorizeRole('doctor'), authDoc, doctorController.consult)
 doctorRoute.patch('/doctorEndAppointment/:appId', validateDoctorToken,authorizeRole('doctor'), doctorController.endAppointment)
 doctorRoute.get('/load-doc-chatess/:chatId',validateDoctorToken,authorizeRole('doctor'), doctorController.docChatEssentials)
 doctorRoute.get('/schedule-data', validateDoctorToken,authorizeRole('doctor'), doctorController.viewDocSchedule)
-doctorRoute.patch('/addPrescription', validateDoctorToken,authorizeRole('doctor'), doctorController.addPrescription)
-doctorRoute.get('/patients', validateDoctorToken,authorizeRole('doctor'), doctorController.patients)
+doctorRoute.patch('/addPrescription', validateDoctorToken,authorizeRole('doctor'), authDoc , doctorController.addPrescription)
+doctorRoute.get('/patients', validateDoctorToken,authorizeRole('doctor'),authDoc, doctorController.patients)
 doctorRoute.get('/chat/history', validateDoctorToken,authorizeRole('doctor'), ChatUsecases.getChatByChatId)
 doctorRoute.get('/dashboard', validateDoctorToken,authorizeRole('doctor'), doctorController.dash)
-doctorRoute.get('/prescriptions', validateDoctorToken, authorizeRole('doctor'), doctorController.prescriptions)
+doctorRoute.get('/prescriptions', validateDoctorToken, authorizeRole('doctor'),authDoc, doctorController.prescriptions)
 
 
 
